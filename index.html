@@ -46,6 +46,35 @@
             justify-content: center;
             overflow: hidden;
         }
+
+
+        @media screen and (min-width: 1201px) {
+            .card-columns {
+                column-count: 5;
+            }
+        }
+
+        /* 设置了浏览器宽度不小于1201px时 */
+        @media screen and (max-width: 1200px) {
+            .card-columns {
+                column-count: 4;
+            }
+        }
+
+        /* 设置了浏览器宽度不大于1200px时 */
+        @media screen and (max-width: 900px) {
+            .card-columns {
+                column-count: 3;
+            }
+        }
+
+        /* 设置了浏览器宽度不大于900px时 */
+        @media screen and (max-width: 500px) {
+            .card-columns {
+                column-count: 2;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -71,7 +100,7 @@
 
 
 <div class="container-fluid">
-    <div class="card-deck mb-3 text-center">
+    <div class="card-columns mb-3 text-center">
 
         <div class="card bg-dark mb-3 shadow-sm">
             <div class="card-header">
@@ -82,6 +111,7 @@
                    href="https://dev.onepay.finance/consolems/autoFinanceManage/autoFinanceAll" role="button">自動精算</a>
                 <a class="btn btn-lg btn-block btn-outline-danger"
                    href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000164708_00001.html" role="button">新型コロナ</a>
+                
 
             </div>
         </div>
