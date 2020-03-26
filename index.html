@@ -46,6 +46,9 @@
             justify-content: center;
             overflow: hidden;
         }
+        .card-columns {
+            column-count: 5;
+        }
     </style>
 </head>
 <body>
@@ -71,7 +74,7 @@
 
 
 <div class="container-fluid">
-    <div class="card-deck mb-3 text-center">
+    <div class="card-columns mb-3 text-center">
 
         <div class="card bg-dark mb-3 shadow-sm">
             <div class="card-header">
@@ -82,6 +85,8 @@
                    href="https://dev.onepay.finance/consolems/autoFinanceManage/autoFinanceAll" role="button">自動精算</a>
                 <a class="btn btn-lg btn-block btn-outline-danger"
                    href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000164708_00001.html" role="button">新型コロナ</a>
+                <a class="btn btn-lg btn-block btn-outline-info"
+                   href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/shou302.htm" role="button">国税庁</a>
 
             </div>
         </div>
@@ -188,10 +193,9 @@
     </div>
 
 </div>
-<footer class="p-3 pl-5 border-top fixed-bottom">
+<footer class="p-3 pl-5 border-top">
     <div class="row">
         <div class="col-4 col-md">
-            <!--  <img class="mb-2" src="#" alt="" width="96" height="68"> -->
             <small class="d-block mb-3 text-muted">© 2020</small>
         </div>
         <div class="col-3 col-md">
