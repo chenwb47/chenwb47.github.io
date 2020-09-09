@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Awesomelinks">
     <meta name="author" content="chenwb47@gmail.com">
-    <meta name="reference" content="teng.xie's xpay-index">
 
     <title>Awesome Links</title>
     <link rel="shortcut icon" href="https://avatars2.githubusercontent.com/u/18323806?s=460&v=4">
@@ -22,6 +21,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+
+    <!-- Vue production version, optimized for size and speed -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
     <style>
         html {
@@ -85,18 +87,8 @@
 <body>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 border-bottom shadow-sm">
         <h5 class="my-0 mr-md-auto text-light font-weight-normal">Awesome Links</h5>
-        <div class="header-buttons">
-            <a class="btn btn btn-outline-primary" href="https://console.cloud.google.com" role="button">GoogleCloud</a>
-            <a class="btn btn-outline-secondary" href="https://zh.wikipedia.org/wiki/Wikipedia:%E9%A6%96%E9%A1%B5"
-                role="button">WikiZH</a>
-            <a class="btn btn-outline-success" href="https://sites.google.com/site/auroralrays/hayamihyou/"
-                role="button">早見</a>
-            <a class="btn btn-outline-danger" href="https://numpy.org/learn/" role="button">NumPy</a>
-            <button type="button" class="btn btn-outline-warning">Warning</button>
-            <button type="button" class="btn btn-outline-info">Info</button>
-            <a class="btn btn-outline-light" href="https://jiajially.gitbooks.io/dockerguide/content/index.html"
-                role="button">Docker-Guide</a>
-            <button type="button" class="btn btn-outline-dark">→</button>
+        <div class="header-buttons" id="header-buttions">
+            <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
         </div>
         <nav class="my-2 my-md-0 mr-md-3">
             <div>
@@ -116,29 +108,8 @@
                 <div class="card-header">
                     <h4 class="my-0 text-light font-weight-normal">Frequently</h4>
                 </div>
-                <div class="card-body">
-                    <a class="btn btn-lg btn-block btn-outline-success" href="https://templates.office.com/"
-                        role="button">MicrosoftTemplate</a>
-                    <a class="btn btn-lg btn-block btn-outline-success" href="https://start.spring.io/"
-                        role="button">SpringInitializr</a>
-                    <a class="btn btn-lg btn-block btn-outline-info" href="https://developer.aliyun.com/"
-                        role="button">AliDeveloper</a>
-                </div>
-                <div class="card-body">
-                    <a class="btn btn-lg btn-block btn-outline-danger"
-                        href="https://www.cas.go.jp/jp/influenza/novel_coronavirus.html" role="button">内閣官房新型</a>
-                    <a class="btn btn-lg btn-block btn-outline-info"
-                        href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000164708_00001.html"
-                        role="button">厚生労働省</a>
-                    <a class="btn btn-lg btn-block btn-outline-success"
-                        href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/shou302.htm" role="button">国税庁</a>
-                </div>
-                <div class="card-header">
-                    <h4 class="my-0 text-light font-weight-normal">MyWork</h4>
-                </div>
-                <div class="card-body">
-                    <a class="btn btn-lg btn-block btn-outline-primary" href="https://trello.com/b/Mn3Eblsb/mytodo"
-                        role="button">Trello</a>
+                <div class="card-body" id="frequently-card-body">
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
                 </div>
             </div>
 
@@ -146,30 +117,12 @@
                 <div class="card-header">
                     <h4 class="my-0 text-light font-weight-normal">Tools</h4>
                 </div>
-                <div class="card-body">
-                    <a class="btn btn-lg btn-block btn-outline-primary"
-                        href="https://www.expressvpn.com/password-generator" role="button">RandomString</a>
-                    <a class="btn btn-lg btn-block btn-outline-danger" href="https://www.expressvpn.com/what-is-my-ip"
-                        role="button">WhatIsMyIP</a>
-                    <a class="btn btn-lg btn-block btn-outline-info"
-                        href="https://idmsa.apple.com/IDMSWebAuth/login?appIdKey=891bd3417a7776362562d2197f89480a8547b108fd934911bcbea0110d07f757&path=%2Faccount%2F&rv=1"
-                        role="button">AppleDeveloper</a>
-                    <a class="btn btn-lg btn-block btn-outline-success" href="https://ja.qr-code-generator.com/"
-                        role="button">QR</a>
-                    <a class="btn btn-lg btn-block btn-outline-danger" href="https://regex101.com/"
-                        role="button">Regex</a>
-                    <a class="btn btn-lg btn-block btn-outline-light"
-                        href="https://testpage.jp/tool/hankaku_zenkaku.php" role="button">半角全角</a>
+                <div class="card-body" id="tools-card-body">
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
                 </div>
-
-                <div class="card-body">
+                <div class="card-body" id="formatter-card-body">
                     <h5 class="card-title text-light ">Formatter</h5>
-                    <a class="btn btn-lg btn-block btn-outline-info"
-                        href="https://codebeautify.org/python-formatter-beautifier" role="button">Python</a>
-                    <a class="btn btn-lg btn-block btn-outline-info" href="https://codebeautify.org/sqlformatter"
-                        role="button">SQL</a>
-                    <a class="btn btn-lg btn-block btn-outline-light"
-                        href="https://jsoneditoronline.org/#left=local.tivolo" role="button">OnlineJson</a>
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
                 </div>
             </div>
 
@@ -177,18 +130,12 @@
                 <div class="card-header">
                     <h4 class="my-0 text-light font-weight-normal">署名</h4>
                 </div>
-                <div class="card-body">
-                    <a class="btn btn-lg btn-block btn-outline-primary" href="https://myssl.com/"
-                        role="button">SSL証明書確認</a>
-                    <a class="btn btn-lg btn-block btn-outline-danger" href="https://hogehoge.tk/tool/"
-                        role="button">データ変換</a>
-                    <a class="btn btn-lg btn-block btn-outline-light" href="https://testpage.jp/tool/"
-                        role="button">ツール</a>
+                <div class="card-body" id="sign-card-body">
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title text-light">Markdown</h5>
-                    <a class="btn btn-lg btn-block btn-outline-primary"
-                        href="https://support.typora.io/Draw-Diagrams-With-Markdown/" role="button">Typora-Diagrams</a>
+                <div class="card-body" id="myself-card-body">
+                    <h5 v-once class="card-title text-light ">MySelf</h5>
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
                 </div>
             </div>
 
@@ -196,70 +143,193 @@
                 <div class="card-header">
                     <h4 class="my-0 text-light font-weight-normal">DEV</h4>
                 </div>
-                <div class="card-body">
-                    <a class="btn btn-lg btn-block btn-outline-primary" href="https://devdocs.io/"
-                        role="button">DevDocs</a>
-                    <a class="btn btn-lg btn-block btn-outline-danger" href="https://tool.oschina.net/"
-                        role="button">ChineseOnlineTool</a>
-                    <a class="btn btn-lg btn-block btn-outline-info" href="https://codebeautify.org/"
-                        role="button">CodeBeautify</a>
+                <div class="card-body" id="dev-card-body">
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title text-light">BS4</h5>
-                    <a class="btn btn-lg btn-block btn-outline-primary"
-                        href="https://getbootstrap.com/docs/4.0/getting-started/introduction/"
-                        role="button">Introduction</a>
-                    <a class="btn btn-lg btn-block btn-outline-secondary"
-                        href="https://getbootstrap.com/docs/4.0/utilities/spacing/" role="button">Spacing</a>
-                    <a class="btn btn-lg btn-block btn-outline-success"
-                        href="https://www.w3schools.com/bootstrap4/default.asp" role="button">BS4 Home w3schools</a>
+                <div class="card-body" id="bs4-card-body">
+                    <h5 v-once class="card-title text-light ">BS4</h5>
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title text-light ">Spring</h5>
-                    <a class="btn btn-lg btn-block btn-outline-primary" href="https://spring.io/"
-                        role="button">Spring</a>
-                    <a class="btn btn-lg btn-block btn-outline-info" href="https://spring.io/quickstart"
-                        role="button">Quickstart</a>
+                <div class="card-body" id="spring-card-body">
+                    <h5 v-once class="card-title text-light ">Spring</h5>
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
                 </div>
             </div>
             <div class="card mb-3 bg-dark shadow-sm">
                 <div class="card-header">
                     <h4 class="my-0 text-light font-weight-normal">Others</h4>
                 </div>
-                <div class="card-body">
-                    <a class="btn btn-lg btn-block btn-outline-primary" href="https://quotefancy.com/"
-                        role="button">Quotefancy</a>
-                    <a class="btn btn-lg btn-block btn-outline-danger" href="https://onplanners.com/user/50508"
-                        role="button">onplanners</a>
-                    <a class="btn btn-lg btn-block btn-outline-info" href="http://ping.chinaz.com/"
-                        role="button">PING</a>
-                    <a class="btn btn-lg btn-block btn-outline-secondary" href="https://countdown.onlineclock.net/"
-                        role="button">CountDown</a>
+                <div class="card-body" id="others-card-body">
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
                 </div>
             </div>
 
-            <div class="card mb-3 bg-dark shadow-sm">
-                <div class="card-header">
-                    <h4 class="my-0 text-light font-weight-normal">Study</h4>
-                </div>
-                <div class="card-body">
-                    <a class="btn btn-lg btn-block btn-outline-primary"
-                        href="https://account.geekbang.org/dashboard/buy" role="button">极客时间</a>
-                </div>
-            </div>
             <div class="card mb-3 bg-dark shadow-sm">
                 <div class="card-header">
                     <h4 class="my-0 text-light font-weight-normal">バッテリーシェアリング</h4>
                 </div>
-                <div class="card-body">
-                    <a class="btn btn-lg btn-block btn-outline-primary" href="http://search01.jmar.co.jp/mdbds/"
-                        role="button">MDBコンテンツ</a>
-                    <a class="btn btn-lg btn-block btn-outline-secondary" href="http://search01.jmar.co.jp/mdbds/"
-                        role="button">バッテリー市場概況</a>
+                <div class="card-body" id="battery-card-body">
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
                 </div>
             </div>
         </div>
+        <script>
+            function completionBtnClass(color) {
+                return "btn btn-lg btn-block btn-outline-" + color;
+            }
+            const primary = completionBtnClass("primary");
+            const secondary = completionBtnClass("secondary");
+            const danger = completionBtnClass("danger");
+            const info = completionBtnClass("info");
+            const success = completionBtnClass("success");
+            const light = completionBtnClass("light");
+            // header buttons 
+            new Vue({
+                el: "#header-buttions",
+                data: {
+                    values: [
+                        { class: "btn btn-outline-primary", href: "https://console.cloud.google.com", text: "GoogleCloud" },
+                        { class: "btn btn-outline-secondary", href: "https://zh.wikipedia.org/wiki/Wikipedia:%E9%A6%96%E9%A1%B5", text: "WikiZH" },
+                        { class: "btn btn-outline-success", href: "https://sites.google.com/site/auroralrays/hayamihyou/", text: "早見" },
+                        { class: "btn btn-outline-danger", href: "https://numpy.org/learn/", text: "NumPy" },
+                        { class: "btn btn-outline-warning", href: "#", text: "Warning" },
+                        { class: "btn btn-outline-info", href: "#", text: "Info" },
+                        { class: "btn btn-outline-light", href: "https://jiajially.gitbooks.io/dockerguide/content/index.html", text: "Docker-Guide" },
+                        { class: "btn btn-outline-dark", href: "#", text: "→" },
+                    ]
+                }
+            });
+            // Tools
+            new Vue({
+                el: "#tools-card-body",
+                data: {
+                    values: [
+                        { class: primary, href: "https://www.expressvpn.com/password-generator", text: "RandomString" },
+                        { class: danger, href: "https://www.expressvpn.com/what-is-my-ip", text: "WhatIsMyIP" },
+                        { class: info, href: "https://idmsa.apple.com/IDMSWebAuth/login?appIdKey=891bd3417a7776362562d2197f89480a8547b108fd934911bcbea0110d07f757&path=%2Faccount%2F&rv=1", text: "AppleDeveloper" },
+                        { class: success, href: "https://ja.qr-code-generator.com/", text: "QR" },
+                        { class: danger, href: "https://regex101.com/", text: "Regex" },
+                        { class: light, href: "https://testpage.jp/tool/hankaku_zenkaku.php", text: "半角全角" },
+                    ]
+                }
+            });
 
+            // 署名
+            new Vue({
+                el: "#sign-card-body",
+                data: {
+                    values: [
+                        { class: primary, href: "https://myssl.com/", text: "SSL証明書確認" },
+                        { class: danger, href: "https://hogehoge.tk/tool/", text: "データ変換" },
+                        { class: info, href: "https://testpage.jp/tool/", text: "ツール" },
+                    ]
+                }
+            });
+
+            // Frequently
+            new Vue({
+                el: "#frequently-card-body",
+                data: {
+                    values: [
+                        { class: primary, href: "https://templates.office.com/", text: "MicrosoftTemplate" },
+                        { class: danger, href: "https://start.spring.io/", text: "SpringInitializr" },
+                        { class: info, href: "https://developer.aliyun.com/", text: "AliDeveloper" },
+                        { class: success, href: "https://www.cas.go.jp/jp/influenza/novel_coronavirus.html", text: "内閣官房新型" },
+                        { class: danger, href: "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000164708_00001.html", text: "厚生労働省" },
+                        { class: light, href: "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/shou302.htm", text: "国税庁" },
+                    ]
+                }
+            });
+
+            // Formatter
+            new Vue({
+                el: "#formatter-card-body",
+                data: {
+                    values: [
+                        { class: info, href: "https://codebeautify.org/python-formatter-beautifier", text: "Python" },
+                        { class: info, href: "https://codebeautify.org/sqlformatter", text: "SQL" },
+                        { class: light, href: "https://jsoneditoronline.org/#left=local.tivolo", text: "OnlineJson" },
+                    ]
+                }
+            });
+            // Spring
+            new Vue({
+                el: "#myself-card-body",
+                data: {
+                    values: [
+                        { class: primary, href: "https://support.typora.io/Draw-Diagrams-With-Markdown/", text: "Typora-Diagrams" },
+                        { class: info, href: "https://trello.com/b/Mn3Eblsb/mytodo", text: "Trello" },
+                        { class: light, href: "https://account.geekbang.org/dashboard/buy", text: "极客时间" },
+                    ]
+                }
+            });
+
+            // Others
+            new Vue({
+                el: "#others-card-body",
+                data: {
+                    values: [
+                        { class: primary, href: "https://quotefancy.com/", text: "Quotefancy" },
+                        { class: danger, href: "https://onplanners.com/user/50508", text: "onplanners" },
+                        { class: info, href: "http://ping.chinaz.com/", text: "PING" },
+                        { class: secondary, href: "https://countdown.onlineclock.net", text: "CountDown" },
+                    ]
+                }
+            });
+            // Spring
+            new Vue({
+                el: "#spring-card-body",
+                data: {
+                    values: [
+                        { class: primary, href: "https://spring.io/", text: "Spring" },
+                        { class: info, href: "https://spring.io/quickstart", text: "Quickstart" },
+                    ]
+                }
+            });
+            // BS4
+            new Vue({
+                el: "#bs4-card-body",
+                data: {
+                    values: [
+                        { class: primary, href: "https://getbootstrap.com/docs/4.0/getting-started/introduction/", text: "Introduction" },
+                        { class: secondary, href: "https://getbootstrap.com/docs/4.0/utilities/spacing/", text: "Spacing" },
+                        { class: success, href: "https://www.w3schools.com/bootstrap4/default.asp", text: "BS4 Home w3schools" },
+                    ]
+                }
+            });
+            // DEV
+            new Vue({
+                el: "#dev-card-body",
+                data: {
+                    values: [
+                        { class: primary, href: "https://devdocs.io/", text: "DevDocs" },
+                        { class: danger, href: "https://tool.oschina.net/", text: "ChineseOnlineTool" },
+                        { class: info, href: "https://codebeautify.org/", text: "CodeBeautify" },
+                    ]
+                }
+            });
+            // BS4
+            new Vue({
+                el: "#dev-card-body",
+                data: {
+                    values: [
+                        { class: primary, href: "https://devdocs.io/", text: "DevDocs" },
+                        { class: danger, href: "https://tool.oschina.net/", text: "ChineseOnlineTool" },
+                        { class: info, href: "https://codebeautify.org/", text: "CodeBeautify" },
+                    ]
+                }
+            });
+
+            // バッテリー
+            new Vue({
+                el: "#battery-card-body",
+                data: {
+                    values: [
+                        { class: primary, href: "http://search01.jmar.co.jp/mdbds/", text: "MDBコンテンツ" },
+                    ]
+                }
+            });
+        </script>
 </body>
 
 </html>
