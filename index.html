@@ -128,19 +128,6 @@
 
             <div class="card bg-dark mb-3 shadow-sm">
                 <div class="card-header">
-                    <h4 class="my-0 text-light font-weight-normal">署名</h4>
-                </div>
-                <div class="card-body" id="sign-card-body">
-                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
-                </div>
-                <div class="card-body" id="myself-card-body">
-                    <h5 v-once class="card-title text-light ">MySelf</h5>
-                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
-                </div>
-            </div>
-
-            <div class="card bg-dark mb-3 shadow-sm">
-                <div class="card-header">
                     <h4 class="my-0 text-light font-weight-normal">DEV</h4>
                 </div>
                 <div class="card-body" id="dev-card-body">
@@ -155,6 +142,20 @@
                     <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
                 </div>
             </div>
+
+            <div class="card bg-dark mb-3 shadow-sm">
+                <div class="card-header">
+                    <h4 class="my-0 text-light font-weight-normal">署名</h4>
+                </div>
+                <div class="card-body" id="sign-card-body">
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
+                </div>
+                <div class="card-body" id="myself-card-body">
+                    <h5 v-once class="card-title text-light ">MySelf</h5>
+                    <a v-for="value in values" :class="value.class" :href="value.href" role="button">{{value.text}}</a>
+                </div>
+            </div>
+
             <div class="card mb-3 bg-dark shadow-sm">
                 <div class="card-header">
                     <h4 class="my-0 text-light font-weight-normal">Others</h4>
@@ -254,6 +255,7 @@
                     ]
                 }
             });
+
             // Spring
             new Vue({
                 el: "#myself-card-body",
@@ -294,7 +296,6 @@
                 data: {
                     values: [
                         { class: primary, href: "https://getbootstrap.com/docs/4.0/getting-started/introduction/", text: "Introduction" },
-                        { class: secondary, href: "https://getbootstrap.com/docs/4.0/utilities/spacing/", text: "Spacing" },
                         { class: success, href: "https://www.w3schools.com/bootstrap4/default.asp", text: "BS4 Home w3schools" },
                     ]
                 }
@@ -310,13 +311,14 @@
                     ]
                 }
             });
-            // BS4
+            // DEV
             new Vue({
                 el: "#dev-card-body",
                 data: {
                     values: [
                         { class: primary, href: "https://devdocs.io/", text: "DevDocs" },
-                        { class: danger, href: "https://tool.oschina.net/", text: "ChineseOnlineTool" },
+                        { class: secondary, href: "https://tool.oschina.net/", text: "ChineseOnlineTool" },
+                        { class: danger, href: "https://www.sojson.com/convert/subnetmask.html", text: "SubnetMask" },
                         { class: info, href: "https://codebeautify.org/", text: "CodeBeautify" },
                     ]
                 }
