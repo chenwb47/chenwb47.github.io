@@ -1,0 +1,13 @@
+# Common system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node / build artifacts (uncomment if applicable)
+# node_modules/
+# dist/
+# build/
+
+# Environment and logs
+.env
+*.log

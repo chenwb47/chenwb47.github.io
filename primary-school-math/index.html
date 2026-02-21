@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>小学数学知识可达矩阵分析系统 (1-6年级)</title>
+
+    <!-- 第三方库 -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- 本地样式 -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+
+    <!-- 顶部导航 -->
+    <nav
+        class="bg-slate-900/90 border-b border-slate-800 h-14 md:h-16 flex items-center justify-between px-3 md:px-6 fixed w-full z-50 backdrop-blur-md">
+        <div class="flex items-center gap-2 md:gap-3">
+            <div
+                class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg">
+                <svg class="w-5 h-5 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-base md:text-lg font-bold text-white">知识可达矩阵分析</h1>
+                <p class="text-[10px] md:text-xs text-slate-400 hidden sm:block">小学1-6年级 · 传递闭包计算 · 多源关联分析</p>
+                <p class="text-[10px] md:text-xs text-slate-400 sm:hidden">小学1-6年级 · 知识图谱</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 md:gap-4">
+            <div class="text-xs md:text-sm text-slate-400">
+                <span class="hidden md:inline">节点: </span><span class="text-white font-bold" id="nodeCount">0</span>
+                <span class="hidden md:inline"> | 边: </span><span class="md:hidden">/</span><span class="text-white font-bold" id="edgeCount">0</span>
+            </div>
+            <button onclick="resetAll()"
+                class="px-2 py-1.5 md:px-4 md:py-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs md:text-sm transition-colors border border-slate-700">
+                <span class="hidden md:inline">重置系统</span>
+                <span class="md:hidden">重置</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 移动端标签切换 -->
+    <div class="md:hidden fixed top-14 left-0 right-0 z-40 bg-slate-900/95 border-b border-slate-800 flex">
+        <button onclick="switchMobileTab('control')" id="tab-control"
+            class="flex-1 py-2 text-xs font-medium text-indigo-400 border-b-2 border-indigo-500 bg-slate-800/50">
+            控制面板
+        </button>
+        <button onclick="switchMobileTab('graph')" id="tab-graph"
+            class="flex-1 py-2 text-xs font-medium text-slate-400 border-b-2 border-transparent">
+            知识图谱
+        </button>
+        <button onclick="switchMobileTab('matrix')" id="tab-matrix"
+            class="flex-1 py-2 text-xs font-medium text-slate-400 border-b-2 border-transparent">
+            可达矩阵
+        </button>
+    </div>
+
+    <div class="flex flex-col md:flex-row h-screen pt-14 md:pt-16">
+
+        <!-- 左侧控制面板 -->
+        <div id="panel-control" class="mobile-tab-panel w-full md:w-[400px] lg:w-[450px] bg-slate-900/50 border-r border-slate-800 flex flex-col glass-panel z-30 overflow-y-auto md:block">
+
+            <!-- 年级筛选 -->
+            <div class="p-4 md:p-6 border-b border-slate-800">
+                <h2 class="text-base md:text-lg font-semibold mb-3 flex items-center gap-2 text-cyan-400">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    </svg>
+                    年级筛选
+                </h2>
+                <div class="text-xs text-slate-500 mb-3">选择要显示的年级（可多选）</div>
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-2" id="gradeFilter">
+                    <label class="flex items-center gap-1.5 p-2 bg-slate-800/50 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+                        <input type="checkbox" value="1" class="grade-check rounded border-slate-600 bg-slate-700 text-cyan-500 focus:ring-cyan-500" checked>
+                        <span class="text-xs text-slate-300">1年级</span>
+                    </label>
+                    <label class="flex items-center gap-1.5 p-2 bg-slate-800/50 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+                        <input type="checkbox" value="2" class="grade-check rounded border-slate-600 bg-slate-700 text-cyan-500 focus:ring-cyan-500" checked>
+                        <span class="text-xs text-slate-300">2年级</span>
+                    </label>
+                    <label class="flex items-center gap-1.5 p-2 bg-slate-800/50 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+                        <input type="checkbox" value="3" class="grade-check rounded border-slate-600 bg-slate-700 text-cyan-500 focus:ring-cyan-500" checked>
+                        <span class="text-xs text-slate-300">3年级</span>
+                    </label>
+                    <label class="flex items-center gap-1.5 p-2 bg-slate-800/50 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+                        <input type="checkbox" value="4" class="grade-check rounded border-slate-600 bg-slate-700 text-cyan-500 focus:ring-cyan-500" checked>
+                        <span class="text-xs text-slate-300">4年级</span>
+                    </label>
+                    <label class="flex items-center gap-1.5 p-2 bg-slate-800/50 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+                        <input type="checkbox" value="5" class="grade-check rounded border-slate-600 bg-slate-700 text-cyan-500 focus:ring-cyan-500" checked>
+                        <span class="text-xs text-slate-300">5年级</span>
+                    </label>
+                    <label class="flex items-center gap-1.5 p-2 bg-slate-800/50 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
+                        <input type="checkbox" value="6" class="grade-check rounded border-slate-600 bg-slate-700 text-cyan-500 focus:ring-cyan-500" checked>
+                        <span class="text-xs text-slate-300">6年级</span>
+                    </label>
+                </div>
+                <div class="flex gap-2 mt-3">
+                    <button onclick="selectAllGrades()" class="flex-1 py-1.5 text-xs bg-slate-700 hover:bg-slate-600 rounded transition-colors">全选</button>
+                    <button onclick="clearAllGrades()" class="flex-1 py-1.5 text-xs bg-slate-700 hover:bg-slate-600 rounded transition-colors">清空</button>
+                </div>
+            </div>
+
+            <!-- 可达矩阵查询 -->
+            <div class="p-4 md:p-6 border-b border-slate-800">
+                <h2 class="text-base md:text-lg font-semibold mb-3 flex items-center gap-2 text-indigo-400">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                    </svg>
+                    可达性查询
+                </h2>
+
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs md:text-sm text-slate-400 mb-1.5">起点知识（源）</label>
+                        <select id="sourceSelect" onchange="updateReachabilityAnalysis()"
+                            class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-xs md:text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="">选择起点...</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs md:text-sm text-slate-400 mb-1.5">终点知识（目标）</label>
+                        <select id="targetSelect" onchange="updateReachabilityAnalysis()"
+                            class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-xs md:text-sm focus:ring-2 focus:ring-pink-500 outline-none">
+                            <option value="">选择终点...</option>
+                        </select>
+                    </div>
+
+                    <button onclick="calculatePath()"
+                        class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 rounded-lg text-xs md:text-sm font-medium transition-colors shadow-lg shadow-indigo-500/30">
+                        计算可达路径
+                    </button>
+                </div>
+
+                <!-- 查询结果 -->
+                <div id="queryResult" class="mt-4 hidden">
+                    <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs md:text-sm text-slate-400">可达性判定</span>
+                            <span id="reachabilityStatus" class="px-2 py-1 rounded text-xs font-bold"></span>
+                        </div>
+                        <div id="pathDetails" class="space-y-2 text-xs md:text-sm"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 多源关联分析 -->
+            <div class="p-4 md:p-6 border-b border-slate-800">
+                <h2 class="text-base md:text-lg font-semibold mb-3 flex items-center gap-2 text-emerald-400">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    多源关联分析
+                </h2>
+
+                <div class="space-y-3">
+                    <div class="text-xs text-slate-500">选择多个已掌握知识点，查看联合可达范围</div>
+                    <div id="multiSourceList" class="space-y-2 max-h-32 md:max-h-40 overflow-y-auto">
+                        <!-- 动态生成 -->
+                    </div>
+
+                    <button onclick="analyzeMultiSource()"
+                        class="w-full py-2 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/50 text-emerald-400 rounded-lg text-xs md:text-sm font-medium transition-colors">
+                        分析联合可达性
+                    </button>
+                </div>
+
+                <div id="multiSourceResult" class="mt-4 hidden space-y-2"></div>
+            </div>
+
+            <!-- 掌握状态管理 -->
+            <div class="p-4 md:p-6 pb-24 md:pb-6">
+                <h2 class="text-base md:text-lg font-semibold mb-3 flex items-center gap-2 text-amber-400">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    掌握状态模拟
+                </h2>
+
+                <div class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
+                    <button onclick="simulateMastered('1年级')"
+                        class="px-2 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/50 text-yellow-400 rounded-lg text-xs font-medium transition-colors">
+                        1年级
+                    </button>
+                    <button onclick="simulateMastered('2年级')"
+                        class="px-2 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-lg text-xs font-medium transition-colors">
+                        2年级
+                    </button>
+                    <button onclick="simulateMastered('3年级')"
+                        class="px-2 py-2 bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 text-green-400 rounded-lg text-xs font-medium transition-colors">
+                        3年级
+                    </button>
+                    <button onclick="simulateMastered('4年级')"
+                        class="px-2 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 text-purple-400 rounded-lg text-xs font-medium transition-colors">
+                        4年级
+                    </button>
+                    <button onclick="simulateMastered('5年级')"
+                        class="px-2 py-2 bg-pink-500/20 hover:bg-pink-500/30 border border-pink-500/50 text-pink-400 rounded-lg text-xs font-medium transition-colors">
+                        5年级
+                    </button>
+                    <button onclick="simulateMastered('6年级')"
+                        class="px-2 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 rounded-lg text-xs font-medium transition-colors">
+                        6年级
+                    </button>
+                </div>
+
+                <div class="flex gap-2 mb-4">
+                    <button onclick="simulateMastered('基础')"
+                        class="flex-1 px-2 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs font-medium transition-colors">
+                        仅基础
+                    </button>
+                    <button onclick="clearMastered()"
+                        class="flex-1 px-2 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 rounded-lg text-xs font-medium transition-colors">
+                        清空
+                    </button>
+                </div>
+
+                <div class="bg-slate-800/30 rounded-lg p-3 border border-slate-700">
+                    <div class="text-xs text-slate-400 mb-1">当前掌握: <span id="masteredCount"
+                            class="text-white font-bold">0</span> 个</div>
+                    <div class="text-xs text-slate-400">就绪可学: <span id="readyCount"
+                            class="text-amber-400 font-bold">0</span> 个</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 中间可视化 -->
+        <div id="panel-graph" class="mobile-tab-panel hidden md:flex flex-1 relative bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+            <div id="graphContainer" class="w-full h-full"></div>
+
+            <!-- 图例 - 移动端简化 -->
+            <div class="absolute top-3 left-3 md:top-4 md:left-4 bg-slate-900/95 backdrop-blur p-3 md:p-4 rounded-xl border border-slate-800 shadow-2xl max-w-[140px] md:max-w-xs">
+                <h3 class="font-semibold text-slate-200 mb-2 text-xs md:text-sm">图例</h3>
+                <div class="space-y-1.5 text-[10px] md:text-xs">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-blue-500"></div>
+                        <span class="text-slate-300">起点</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-pink-500 animate-pulse"></div>
+                        <span class="text-slate-300">终点</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-emerald-500"></div>
+                        <span class="text-slate-300">已掌握</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-amber-500"></div>
+                        <span class="text-slate-300">就绪</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-4 md:w-8 h-0.5 bg-pink-500"></div>
+                        <span class="text-slate-300">路径</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧可达矩阵 -->
+        <div id="panel-matrix" class="mobile-tab-panel hidden md:flex w-full md:w-[400px] lg:w-[500px] bg-slate-900/50 border-l border-slate-800 flex-col glass-panel z-30">
+            <div class="p-3 md:p-4 border-b border-slate-800 flex justify-between items-center">
+                <h2 class="text-base md:text-lg font-semibold text-slate-200">可达矩阵 R</h2>
+                <div class="flex gap-2">
+                    <button onclick="exportMatrix()"
+                        class="px-2 py-1 md:px-3 md:py-1.5 bg-slate-800 hover:bg-slate-700 rounded text-xs transition-colors border border-slate-700">
+                        导出CSV
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-auto p-3 md:p-4" id="matrixContainer">
+                <div class="text-center text-slate-500 py-12">
+                    <div class="w-12 h-12 md:w-16 md:h-16 bg-slate-800 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-6 h-6 md:w-8 md:h-8 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                    </div>
+                    <p class="text-sm md:text-base">选择起点和终点<br>计算传递闭包矩阵</p>
+                </div>
+            </div>
+
+            <!-- 矩阵说明 -->
+            <div class="p-3 md:p-4 border-t border-slate-800 bg-slate-900/30 text-[10px] md:text-xs text-slate-400 space-y-1.5 md:space-y-2">
+                <div class="flex justify-between">
+                    <span>R<sub>ij</sub> = 1</span>
+                    <span>表示知识点 i 可达知识点 j</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>R<sub>ii</span>
+                    <span>自反性（恒为1）</span>
+                </div>
+                <div class="text-slate-500 italic mt-2">
+                    使用Warshall算法计算传递闭包
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js" defer></script>
+
+</body>
+
+</html>
