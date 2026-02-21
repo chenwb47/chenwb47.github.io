@@ -206,6 +206,17 @@ document.addEventListener('DOMContentLoaded', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(handleResize, 300);
     });
+    
+    // 监听移动端标签切换，切换到图谱标签时重新渲染
+    const graphTab = document.getElementById('tab-graph');
+    if (graphTab) {
+        graphTab.addEventListener('click', () => {
+            // 延迟执行以确保容器已经显示
+            setTimeout(() => {
+                handleResize();
+            }, 100);
+        });
+    }
 });
 
 // 移动端标签切换
@@ -373,14 +384,31 @@ function initGraph() {
     d3.select('#graphContainer').selectAll('svg').remove();
 
     const container = document.getElementById('graphContainer');
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    let width = container.clientWidth || container.offsetWidth;
+    let height = container.clientHeight || container.offsetHeight;
+    
+    // 如果容器尺寸为0，尝试从父元素获取或使用默认值（移动端兼容）
+    if (width === 0 || height === 0) {
+        const parent = container.parentElement;
+        if (parent) {
+            width = parent.clientWidth || parent.offsetWidth || window.innerWidth;
+            height = parent.clientHeight || parent.offsetHeight || window.innerHeight;
+        } else {
+            width = window.innerWidth;
+            height = window.innerHeight - 112; // 减去导航栏高度 (14*4 + 16*4)
+        }
+    }
+    
+    // 确保最小尺寸
+    width = Math.max(width, 300);
+    height = Math.max(height, 300);
 
     svg = d3.select('#graphContainer')
         .append('svg')
         .attr('width', width)
         .attr('height', height)
-        .attr('viewBox', [0, 0, width, height]);
+        .attr('viewBox', [0, 0, width, height])
+        .style('display', 'block');
 
     const defs = svg.append('defs');
 
@@ -448,8 +476,25 @@ function renderGraph() {
         return;
     }
 
-    const width = document.getElementById('graphContainer').clientWidth;
-    const height = document.getElementById('graphContainer').clientHeight;
+    const container = document.getElementById('graphContainer');
+    let width = container.clientWidth || container.offsetWidth;
+    let height = container.clientHeight || container.offsetHeight;
+    
+    // 如果容器尺寸为0，尝试从父元素获取（兼容移动端标签切换）
+    if (width === 0 || height === 0) {
+        const parent = container.parentElement;
+        if (parent) {
+            width = parent.clientWidth || parent.offsetWidth || window.innerWidth;
+            height = parent.clientHeight || parent.offsetHeight || (window.innerHeight - 112);
+        } else {
+            width = window.innerWidth;
+            height = window.innerHeight - 112;
+        }
+    }
+    
+    // 确保最小尺寸
+    width = Math.max(width, 300);
+    height = Math.max(height, 300);
 
     // 计算状态
     const status = {};
@@ -466,16 +511,23 @@ function renderGraph() {
         }
     });
 
-    // 力导向布局 - 根据节点数量调整参数
-    const linkDistance = nodes.length > 40 ? 80 : 100;
-    const chargeStrength = nodes.length > 40 ? -200 : -300;
-    const collisionRadius = nodes.length > 40 ? 40 : 50;
+    // 力导向布局 - 根据节点数量和屏幕尺寸调整参数
+    const isMobile = width < 768;
+    const baseLinkDistance = isMobile ? 60 : (nodes.length > 40 ? 80 : 100);
+    const baseChargeStrength = isMobile ? -100 : (nodes.length > 40 ? -200 : -300);
+    const baseCollisionRadius = isMobile ? 25 : (nodes.length > 40 ? 40 : 50);
+    
+    // 根据容器大小调整参数
+    const scaleFactor = Math.min(width, height) / 600;
+    const linkDistance = baseLinkDistance * Math.max(0.6, Math.min(1.2, scaleFactor));
+    const chargeStrength = baseChargeStrength * Math.max(0.5, Math.min(1, scaleFactor));
+    const collisionRadius = baseCollisionRadius * Math.max(0.6, Math.min(1, scaleFactor));
 
     simulation = d3.forceSimulation(nodes)
         .force('link', d3.forceLink(edges).id(d => d.id).distance(linkDistance))
         .force('charge', d3.forceManyBody().strength(chargeStrength))
         .force('center', d3.forceCenter(width / 2, height / 2))
-        .force('y', d3.forceY(d => height / 2 + (3.5 - d.grade) * (height / 8)).strength(0.3))
+        .force('y', d3.forceY(d => height / 2 + (3.5 - d.grade) * (height / (isMobile ? 12 : 8))).strength(isMobile ? 0.2 : 0.3))
         .force('collision', d3.forceCollide().radius(collisionRadius));
 
     // 绘制边
@@ -572,13 +624,14 @@ function renderGraph() {
             return colors[d.grade - 1];
         });
 
-    // 节点名称
+    // 节点名称 - 移动端使用更小的字体
+    const isMobileView = (width || window.innerWidth) < 768;
     node.append('text')
         .text(d => d.name)
         .attr('text-anchor', 'middle')
-        .attr('dy', 32)
+        .attr('dy', isMobileView ? 28 : 32)
         .attr('fill', '#e2e8f0')
-        .attr('font-size', '12px')
+        .attr('font-size', isMobileView ? '10px' : '12px')
         .attr('font-weight', '500');
 
     // 标题

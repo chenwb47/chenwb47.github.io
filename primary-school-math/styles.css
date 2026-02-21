@@ -126,6 +126,19 @@ body {
     /* 力导向图容器优化 */
     #graphContainer {
         min-height: 300px;
+        height: 100%;
+        width: 100%;
+    }
+    
+    /* 确保图表面板正确显示 */
+    #panel-graph {
+        height: calc(100vh - 7rem);
+        min-height: 300px;
+    }
+    
+    #panel-graph svg {
+        width: 100% !important;
+        height: 100% !important;
     }
     
     /* 矩阵表格缩小 */
@@ -162,6 +175,10 @@ body {
 /* 桌面端 */
 @media (min-width: 1024px) {
     .mobile-tab-panel {
+        height: calc(100vh - 4rem);
+    }
+    
+    #panel-graph {
         height: calc(100vh - 4rem);
     }
 }
