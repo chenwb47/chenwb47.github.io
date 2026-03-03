@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开源工具精选 Wiki</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #334155;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --gradient-2: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+            --gradient-3: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* 布局容器 */
+        .page-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 左侧导航 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.95);
+            border-right: 1px solid var(--border);
+            z-index: 100;
+            overflow-y: auto;
+            padding: 24px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .sidebar-logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-title {
+            padding: 0 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 2px 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--text-primary);
+        }
+
+        .sidebar-nav a.active {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .sidebar-nav .icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-badge {
+            margin-left: auto;
+            padding: 2px 8px;
+            background: var(--gradient-1);
+            border-radius: 100px;
+            font-size: 0.7rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .sidebar-badge.hot {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            min-height: 100vh;
+        }
+
+        /* 移动端菜单按钮 */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 200;
+            width: 44px;
+            height: 44px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--primary);
+        }
+
+        @media (max-width: 1024px) {
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+
+            header {
+                padding-top: 100px;
+            }
+        }
+
+        /* 背景动画 */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        /* 头部 */
+        header {
+            text-align: center;
+            padding: 80px 20px 60px;
+            position: relative;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* 搜索栏 */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 60px;
+            padding: 0 20px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px 24px 16px 56px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.25rem;
+        }
+
+        /* 分类标签 */
+        .tags {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+            padding: 0 20px;
+        }
+
+        .tag {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover, .tag.active {
+            background: var(--gradient-1);
+            border-color: transparent;
+            color: white;
+        }
+
+        /* 主内容区 */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px 80px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: var(--gradient-1);
+            border-radius: 2px;
+        }
+
+        /* 卡片网格 */
+        .repo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        .repo-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .repo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .repo-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .repo-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .repo-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .repo-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .repo-icon.gitdiagram { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); }
+        .repo-icon.mermaid { background: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%); }
+        .repo-icon.ollama { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); }
+        .repo-icon.langchain { background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); }
+        .repo-icon.cheatsheets { background: linear-gradient(135deg, #f97316 0%, #f59e0b 100%); }
+
+        .repo-title-group {
+            flex: 1;
+        }
+
+        .repo-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .repo-category {
+            font-size: 0.75rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        .repo-desc {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .repo-features {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .feature-item::before {
+            content: '✓';
+            width: 20px;
+            height: 20px;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .repo-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .repo-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .repo-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .repo-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* 代码示例区 */
+        .code-section {
+            margin-top: 60px;
+        }
+
+        .code-block {
+            background: #0d1117;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            background: #161b22;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 4px;
+        }
+
+        .code-tab {
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .code-tab.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .code-tab:hover:not(.active) {
+            color: var(--text-secondary);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .code-content {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        /* Mermaid 展示区 */
+        .mermaid-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 400px;
+        }
+
+        .mermaid-code {
+            border-right: 1px solid var(--border);
+        }
+
+        .mermaid-code .code-content {
+            background: #0d1117;
+        }
+
+        .mermaid-preview {
+            background: var(--bg-card);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-header {
+            padding: 12px 20px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-header::before {
+            content: '👁️';
+        }
+
+        .mermaid-preview .mermaid {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        /* Ollama 安装区 */
+        .ollama-showcase {
+            padding: 24px;
+        }
+
+        .install-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .install-card, .quick-usage {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .install-title {
+            padding: 14px 18px;
+            background: rgba(99, 102, 241, 0.1);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .install-card .code-content,
+        .quick-usage .code-content {
+            padding: 16px;
+            background: transparent;
+        }
+
+        .quick-usage .install-title {
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        @media (max-width: 900px) {
+            .mermaid-showcase {
+                grid-template-columns: 1fr;
+            }
+            
+            .mermaid-code {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .install-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .code-content pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.7;
+            color: #e6edf3;
+        }
+
+        .code-content code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* 语法高亮 */
+        .keyword { color: #ff7b72; }
+        .string { color: #a5d6ff; }
+        .comment { color: #8b949e; }
+        .function { color: #d2a8ff; }
+        .number { color: #79c0ff; }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .repo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                gap: 24px;
+            }
+
+            .stat-value {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- 左侧导航 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">📚</div>
+                <span>开源工具 Wiki</span>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">🔥 2026 热门</div>
+            <ul class="sidebar-nav">
+                <li><a href="#openclaw"><span class="icon">🦞</span> OpenClaw <span class="sidebar-badge hot">NEW</span></a></li>
+                <li><a href="#claude-code"><span class="icon">🤖</span> Claude Code <span class="sidebar-badge hot">NEW</span></a></li>
+                <li><a href="#opencode"><span class="icon">💻</span> OpenCode <span class="sidebar-badge hot">NEW</span></a></li>
+                <li><a href="#deepseek"><span class="icon">🧠</span> DeepSeek-V3 <span class="sidebar-badge hot">NEW</span></a></li>
+                <li><a href="#dify"><span class="icon">🔧</span> Dify <span class="sidebar-badge hot">NEW</span></a></li>
+                <li><a href="#n8n"><span class="icon">⚡</span> n8n <span class="sidebar-badge hot">NEW</span></a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">📦 精选工具</div>
+            <ul class="sidebar-nav">
+                <li><a href="#gitdiagram"><span class="icon">🎯</span> GitDiagram</a></li>
+                <li><a href="#mermaid"><span class="icon">🧜</span> Mermaid</a></li>
+                <li><a href="#ollama"><span class="icon">🦙</span> Ollama</a></li>
+                <li><a href="#langchain"><span class="icon">🔗</span> LangChain</a></li>
+                <li><a href="#cheatsheets"><span class="icon">📋</span> Awesome Cheatsheets</a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-title">快速链接</div>
+            <ul class="sidebar-nav">
+                <li><a href="#quickstart"><span class="icon">🚀</span> 快速开始</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <!-- 移动端菜单按钮 -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="打开菜单">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    <header>
+        <div class="logo">
+            <div class="logo-icon">📚</div>
+        </div>
+        <h1>开源工具精选 Wiki</h1>
+        <p class="subtitle">精选 5 个高质量开源项目，助力开发效率提升，从代码可视化到 AI 工具一应俱全</p>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value">5</div>
+                <div class="stat-label">精选项目</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">230K+</div>
+                <div class="stat-label">总 Star 数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4</div>
+                <div class="stat-label">分类</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" placeholder="搜索项目、功能或关键词..." id="searchInput">
+        </div>
+    </div>
+
+    <div class="tags">
+        <span class="tag active">全部</span>
+        <span class="tag">可视化</span>
+        <span class="tag">AI/ML</span>
+        <span class="tag">开发工具</span>
+        <span class="tag">文档</span>
+    </div>
+
+    <main>
+        <h2 class="section-title">精选开源项目</h2>
+        
+        <div class="repo-grid">
+            <!-- GitDiagram -->
+            <article class="repo-card" id="gitdiagram" data-category="可视化">
+                <div class="repo-header">
+                    <div class="repo-icon gitdiagram">🎯</div>
+                    <div class="repo-title-group">
+                        <h3 class="repo-name">GitDiagram</h3>
+                        <span class="repo-category">代码可视化</span>
+                    </div>
+                </div>
+                <p class="repo-desc">
+                    AI 驱动的 GitHub 仓库可视化工具，可将任何代码库转换为交互式架构图。只需将 GitHub URL 中的 "hub" 替换为 "diagram" 即可 instantly 生成图表。
+                </p>
+                <div class="repo-features">
+                    <div class="feature-item">将仓库结构转为交互式系统架构图</div>
+                    <div class="feature-item">点击组件直接跳转到对应源代码</div>
+                    <div class="feature-item">基于 OpenAI o4-mini 快速生成</div>
+                    <div class="feature-item">支持自定义指令重新生成图表</div>
+                </div>
+                <div class="repo-footer">
+                    <div class="repo-stats">
+                        <span class="repo-stat">⭐ 2.7k</span>
+                        <span class="repo-stat">🔧 TypeScript</span>
+                    </div>
+                    <div class="repo-actions">
+                        <a href="https://gitdiagram.com" target="_blank" class="btn btn-secondary">官网</a>
+                        <a href="https://github.com/ahmedkhaleel2004/gitdiagram" target="_blank" class="btn btn-primary">GitHub</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Mermaid -->
+            <article class="repo-card" id="mermaid" data-category="可视化 文档">
+                <div class="repo-header">
+                    <div class="repo-icon mermaid">🧜</div>
+                    <div class="repo-title-group">
+                        <h3 class="repo-name">Mermaid</h3>
+                        <span class="repo-category">图表绘制</span>
+                    </div>
+                </div>
+                <p class="repo-desc">
+                    基于 JavaScript 的图表绘制工具，使用 Markdown 风格的文本定义动态创建和修改图表。支持流程图、时序图、甘特图等多种图表类型。
+                </p>
+                <div class="repo-features">
+                    <div class="feature-item">支持流程图、时序图、类图、ER图等</div>
+                    <div class="feature-item">GitHub、GitLab、Notion 原生支持</div>
+                    <div class="feature-item">Markdown 集成，版本控制友好</div>
+                    <div class="feature-item">2019 JS Open Source Award 获奖项目</div>
+                </div>
+                <div class="repo-footer">
+                    <div class="repo-stats">
+                        <span class="repo-stat">⭐ 85k+</span>
+                        <span class="repo-stat">🔧 JavaScript</span>
+                    </div>
+                    <div class="repo-actions">
+                        <a href="https://mermaid.js.org" target="_blank" class="btn btn-secondary">文档</a>
+                        <a href="https://github.com/mermaid-js/mermaid" target="_blank" class="btn btn-primary">GitHub</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Ollama -->
+            <article class="repo-card" id="ollama" data-category="AI/ML">
+                <div class="repo-header">
+                    <div class="repo-icon ollama">🦙</div>
+                    <div class="repo-title-group">
+                        <h3 class="repo-name">Ollama</h3>
+                        <span class="repo-category">本地 AI</span>
+                    </div>
+                </div>
+                <p class="repo-desc">
+                    在本地运行开源大语言模型的工具。支持 Llama、Mistral、Code Llama 等多种模型，让开发者能够在自己的机器上轻松部署和运行 AI 模型。
+                </p>
+                <div class="repo-features">
+                    <div class="feature-item">一键运行开源大语言模型</div>
+                    <div class="feature-item">支持 Llama 3、Mistral、CodeLlama 等</div>
+                    <div class="feature-item">支持自定义和创建模型</div>
+                    <div class="feature-item">REST API 和命令行工具</div>
+                </div>
+                <div class="repo-footer">
+                    <div class="repo-stats">
+                        <span class="repo-stat">⭐ 52k+</span>
+                        <span class="repo-stat">🔧 Go</span>
+                    </div>
+                    <div class="repo-actions">
+                        <a href="https://ollama.com" target="_blank" class="btn btn-secondary">官网</a>
+                        <a href="https://github.com/ollama/ollama" target="_blank" class="btn btn-primary">GitHub</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- LangChain -->
+            <article class="repo-card" id="langchain" data-category="AI/ML">
+                <div class="repo-header">
+                    <div class="repo-icon langchain">🔗</div>
+                    <div class="repo-title-group">
+                        <h3 class="repo-name">LangChain</h3>
+                        <span class="repo-category">LLM 框架</span>
+                    </div>
+                </div>
+                <p class="repo-desc">
+                    开发 LLM 应用的框架，提供模块化组件用于构建自定义链式应用。支持监控、评估，并可将任何链转换为 REST API，是构建 AI 应用的首选框架。
+                </p>
+                <div class="repo-features">
+                    <div class="feature-item">模块化组件构建 LLM 应用</div>
+                    <div class="feature-item">支持多种模型和向量数据库</div>
+                    <div class="feature-item">内置监控和评估工具</div>
+                    <div class="feature-item">支持转换为 REST API</div>
+                </div>
+                <div class="repo-footer">
+                    <div class="repo-stats">
+                        <span class="repo-stat">⭐ 96k+</span>
+                        <span class="repo-stat">🔧 Python/JS</span>
+                    </div>
+                    <div class="repo-actions">
+                        <a href="https://python.langchain.com" target="_blank" class="btn btn-secondary">文档</a>
+                        <a href="https://github.com/langchain-ai/langchain" target="_blank" class="btn btn-primary">GitHub</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Awesome Cheatsheets -->
+            <article class="repo-card" id="cheatsheets" data-category="开发工具 文档">
+                <div class="repo-header">
+                    <div class="repo-icon cheatsheets">📋</div>
+                    <div class="repo-title-group">
+                        <h3 class="repo-name">Awesome Cheatsheets</h3>
+                        <span class="repo-category">速查表</span>
+                    </div>
+                </div>
+                <p class="repo-desc">
+                    精心整理的流行编程语言、框架和开发工具的速查表集合。涵盖 Python、JavaScript、Docker、Git 等技术，是开发者快速查阅的必备资源。
+                </p>
+                <div class="repo-features">
+                    <div class="feature-item">涵盖主流编程语言和框架</div>
+                    <div class="feature-item">Docker、Git、Vim 等工具速查</div>
+                    <div class="feature-item">简洁易读的单文件格式</div>
+                    <div class="feature-item">持续更新，社区维护</div>
+                </div>
+                <div class="repo-footer">
+                    <div class="repo-stats">
+                        <span class="repo-stat">⭐ 41k+</span>
+                        <span class="repo-stat">🔧 Markdown</span>
+                    </div>
+                    <div class="repo-actions">
+                        <a href="https://lecoupa.github.io/awesome-cheatsheets/" target="_blank" class="btn btn-secondary">浏览</a>
+                        <a href="https://github.com/LeCoupa/awesome-cheatsheets" target="_blank" class="btn btn-primary">GitHub</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <!-- 2026 热门新项目 -->
+        <h2 class="section-title" style="margin-top: 60px;">🔥 2025/12 - 2026/3 热门新项目</h2>
+        
+        <div class="repo-grid">
+            <!-- OpenClaw -->
+            <article class="repo-card" id="openclaw" data-category="AI/ML">
+                <div class="repo-header">
+                    <div class="repo-icon" style="background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);">🦞</div>
+                    <div class="repo-title-group">
+                        <h3 class="repo-name">OpenClaw</h3>
+                        <span class="repo-category">AI 个人助手</span>
+                    </div>
+                </div>
+                <p class="repo-desc">
+                    开源、自托管的 AI Agent 运行时，可在本地执行任务的跨平台个人 AI 助手。支持任何操作系统，能够主动自动化（通过 Cron 任务），访问本地文件和 Shell。
+                </p>
+                <div class="repo-features">
+                    <div class="feature-item">本地优先的个人 AI 助手</div>
+                    <div class="feature-item">跨平台支持（macOS/Windows/Linux）</div>
+                    <div class="feature-item">主动自动化，可设置定时任务</div>
+                    <div class="feature-item">连接 WhatsApp、Telegram、Discord</div>
+                </div>
+                <div class="repo-footer">
+                    <div class="repo-stats">
+                        <span class="repo-stat">⭐ 212k+</span>
+                        <span class="repo-stat">🔧 TypeScript</span>
+                    </div>
+                    <div class="repo-actions">
+                        <a href="https://github.com/openclaw/openclaw" target="_blank" class="btn btn-primary">GitHub</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Claude Code -->
+            <article class="repo-card" id="claude-code" data-category="AI/ML">
+                <div class="repo-header">
+                    <div class="repo-icon" style="background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);">🤖</div>
+                    <div class="repo-title-group">
+                        <h3 class="repo-name">Claude Code</h3>
+                        <span class="repo-category">AI 编码工具</span>
+                    </div>
+                </div>
+                <p class="repo-desc">
+                    Anthropic 官方推出的 Agentic 编码工具，直接集成在终端中。能够理解整个代码库，通过自然语言执行开发任务、解释代码、管理 Git 工作流。
+                </p>
+                <div class="repo-features">
+                    <div class="feature-item">理解整个代码库的上下文</div>
+                    <div class="feature-item">自然语言执行开发任务</div>
+                    <div class="feature-item">自动重构和代码清理</div>
+                    <div class="feature-item">集成 Git 工作流管理</div>
+                </div>
+                <div class="repo-footer">
+                    <div class="repo-stats">
+                        <span class="repo-stat">⭐ 53.5k+</span>
+                        <span class="repo-stat">🔧 Shell</span>
+                    </div>
+                    <div class="repo-actions">
+                        <a href="https://github.com/anthropics/claude-code" target="_blank" class="btn btn-primary">GitHub</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- OpenCode -->
+            <article class="repo-card" id="opencode" data-category="AI/ML">
+                <div class="repo-header">
+                    <div class="repo-icon" style="background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);">💻</div>
+                    <div class="repo-title-group">
+                        <h3 class="repo-name">OpenCode</h3>
+                        <span class="repo-category">AI 编码代理</span>
+                    </div>
+                </div>
+                <p class="repo-desc">
+                    开源 AI 编码代理，与 Claude Code 竞争的终端编码助手。支持自主任务执行、代码编辑和测试，是 2026 年初增长最快的开源编码工具之一。
+                </p>
+                <div class="repo-features">
+                    <div class="feature-item">开源可定制的编码代理</div>
+                    <div class="feature-item">支持自主调试和部署</div>
+                    <div class="feature-item">与 Claude Code 竞争的替代方案</div>
+                    <div class="feature-item">社区驱动，快速迭代</div>
+                </div>
+                <div class="repo-footer">
+                    <div class="repo-stats">
+                        <span class="repo-stat">⭐ 98k+</span>
+                        <span class="repo-stat">🔧 TypeScript</span>
+                    </div>
+                    <div class="repo-actions">
+                        <a href="https://github.com/sst/opencode" target="_blank" class="btn btn-primary">GitHub</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- DeepSeek-V3 -->
+            <article class="repo-card" id="deepseek" data-category="AI/ML">
+                <div class="repo-header">
+                    <div class="repo-icon" style="background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);">🧠</div>
+                    <div class="repo-title-group">
+                        <h3 class="repo-name">DeepSeek-V3</h3>
+                        <span class="repo-category">开源 LLM</span>
+                    </div>
+                </div>
+                <p class="repo-desc">
+                    性能媲美 GPT-4 的开源大语言模型，采用 MoE 架构，支持 128K 上下文。提供与闭源前沿模型相当的基准测试结果，是开源社区的重要里程碑。
+                </p>
+                <div class="repo-features">
+                    <div class="feature-item">性能媲美 GPT-4 的开源模型</div>
+                    <div class="feature-item">MoE 架构，支持 128K 上下文</div>
+                    <div class="feature-item">支持推理链蒸馏</div>
+                    <div class="feature-item">可在本地或通过 API 使用</div>
+                </div>
+                <div class="repo-footer">
+                    <div class="repo-stats">
+                        <span class="repo-stat">⭐ 100k+</span>
+                        <span class="repo-stat">🔧 Python</span>
+                    </div>
+                    <div class="repo-actions">
+                        <a href="https://github.com/deepseek-ai/DeepSeek-V3" target="_blank" class="btn btn-primary">GitHub</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Dify -->
+            <article class="repo-card" id="dify" data-category="AI/ML">
+                <div class="repo-header">
+                    <div class="repo-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #eab308 100%);">🔧</div>
+                    <div class="repo-title-group">
+                        <h3 class="repo-name">Dify</h3>
+                        <span class="repo-category">AI 应用平台</span>
+                    </div>
+                </div>
+                <p class="repo-desc">
+                    生产就绪的 AI 应用开发平台，提供完整的工具链来构建、部署和管理 AI 应用。支持工作流编排、RAG 管道和多模型集成。
+                </p>
+                <div class="repo-features">
+                    <div class="feature-item">可视化 AI 工作流编排</div>
+                    <div class="feature-item">内置 RAG 管道和向量检索</div>
+                    <div class="feature-item">支持多模型（OpenAI/开源 LLM）</div>
+                    <div class="feature-item">可自托管，数据私有化</div>
+                </div>
+                <div class="repo-footer">
+                    <div class="repo-stats">
+                        <span class="repo-stat">⭐ 120k+</span>
+                        <span class="repo-stat">🔧 TypeScript/Python</span>
+                    </div>
+                    <div class="repo-actions">
+                        <a href="https://dify.ai" target="_blank" class="btn btn-secondary">官网</a>
+                        <a href="https://github.com/langgenius/dify" target="_blank" class="btn btn-primary">GitHub</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- n8n -->
+            <article class="repo-card" id="n8n" data-category="AI/ML">
+                <div class="repo-header">
+                    <div class="repo-icon" style="background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);">⚡</div>
+                    <div class="repo-title-group">
+                        <h3 class="repo-name">n8n</h3>
+                        <span class="repo-category">工作流自动化</span>
+                    </div>
+                </div>
+                <p class="repo-desc">
+                    开源工作流自动化平台，结合可视化无代码界面和代码灵活性，现已集成原生 AI 功能。支持 400+ 集成，可构建强大的 AI Agent 自动化流程。
+                </p>
+                <div class="repo-features">
+                    <div class="feature-item">400+ 集成，可视化工作流编排</div>
+                    <div class="feature-item">原生 AI 能力，支持 LLM 集成</div>
+                    <div class="feature-item">可自托管，Fair-code 许可</div>
+                    <div class="feature-item">AI Agent 和多系统流程自动化</div>
+                </div>
+                <div class="repo-footer">
+                    <div class="repo-stats">
+                        <span class="repo-stat">⭐ 160k+</span>
+                        <span class="repo-stat">🔧 TypeScript</span>
+                    </div>
+                    <div class="repo-actions">
+                        <a href="https://n8n.io" target="_blank" class="btn btn-secondary">官网</a>
+                        <a href="https://github.com/n8n-io/n8n" target="_blank" class="btn btn-primary">GitHub</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <!-- 代码示例区 -->
+        <section class="code-section" id="quickstart">
+            <h2 class="section-title">快速开始</h2>
+            
+            <!-- Mermaid 示例 -->
+            <div class="code-block" id="mermaid-panel">
+                <div class="code-header">
+                    <div class="code-tabs">
+                        <span class="code-tab active" data-panel="mermaid-panel">Mermaid 示例</span>
+                        <span class="code-tab" data-panel="ollama-panel">Ollama 安装</span>
+                    </div>
+                </div>
+                <div class="mermaid-showcase">
+                    <div class="mermaid-code">
+                        <div class="code-content">
+                            <pre><code><span class="comment">```mermaid</span>
+<span class="keyword">graph</span> TD
+    A<span class="string">[开始]</span> --> B<span class="string">{条件判断}</span>
+    B -->|是| C<span class="string">[执行操作]</span>
+    B -->|否| D<span class="string">[结束]</span>
+    C --> D
+    
+    style A <span class="function">fill</span>:#6366f1,stroke:#fff
+    style D <span class="function">fill</span>:#10b981,stroke:#fff
+<span class="comment">```</span></code></pre>
+                        </div>
+                    </div>
+                    <div class="mermaid-preview">
+                        <div class="preview-header">渲染效果</div>
+                        <div class="mermaid">
+graph TD
+    A[开始] --> B{条件判断}
+    B -->|是| C[执行操作]
+    B -->|否| D[结束]
+    C --> D
+    
+    style A fill:#6366f1,stroke:#fff,color:#fff
+    style B fill:#8b5cf6,stroke:#fff,color:#fff
+    style C fill:#06b6d4,stroke:#fff,color:#fff
+    style D fill:#10b981,stroke:#fff,color:#fff
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ollama 安装 -->
+            <div class="code-block" id="ollama-panel" style="display: none;">
+                <div class="code-header">
+                    <div class="code-tabs">
+                        <span class="code-tab" data-panel="mermaid-panel">Mermaid 示例</span>
+                        <span class="code-tab active" data-panel="ollama-panel">Ollama 安装</span>
+                    </div>
+                </div>
+                <div class="ollama-showcase">
+                    <div class="install-methods">
+                        <div class="install-card">
+                            <div class="install-title">🍎 macOS</div>
+                            <div class="code-content">
+                                <pre><code><span class="comment"># 使用 Homebrew 安装</span>
+<span class="function">brew</span> install ollama
+
+<span class="comment"># 或者下载安装包</span>
+<span class="comment"># https://ollama.com/download</span></code></pre>
+                            </div>
+                        </div>
+                        <div class="install-card">
+                            <div class="install-title">🐧 Linux</div>
+                            <div class="code-content">
+                                <pre><code><span class="comment"># 一键安装脚本</span>
+<span class="function">curl</span> -fsSL https://ollama.com/install.sh | <span class="function">sh</span>
+
+<span class="comment"># 启动服务</span>
+<span class="function">sudo</span> systemctl start ollama</code></pre>
+                            </div>
+                        </div>
+                        <div class="install-card">
+                            <div class="install-title">🪟 Windows</div>
+                            <div class="code-content">
+                                <pre><code><span class="comment"># 下载 Windows 安装程序</span>
+<span class="comment"># https://ollama.com/download/windows</span>
+
+<span class="comment"># 或使用 winget</span>
+<span class="function">winget</span> install Ollama.Ollama</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quick-usage">
+                        <div class="install-title">🚀 快速使用</div>
+                        <div class="code-content">
+                            <pre><code><span class="comment"># 拉取并运行 Llama 3</span>
+<span class="function">ollama</span> run llama3
+
+<span class="comment"># 列出本地模型</span>
+<span class="function">ollama</span> list
+
+<span class="comment"># 启动 REST API 服务 (默认端口 11434)</span>
+<span class="function">ollama</span> serve</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    </div><!-- /.main-content -->
+
+    <footer>
+        <p>开源工具精选 Wiki | 使用 <span style="color: var(--primary)">❤</span> 构建</p>
+        <p style="margin-top: 8px; font-size: 0.875rem;">最后更新：2026年3月</p>
+    </footer>
+
+    <script>
+        // 搜索功能
+        const searchInput = document.getElementById('searchInput');
+        const repoCards = document.querySelectorAll('.repo-card');
+        const tags = document.querySelectorAll('.tag');
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            repoCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        });
+
+        // 标签过滤
+        tags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                tags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                
+                const category = tag.textContent.toLowerCase();
+                repoCards.forEach(card => {
+                    if (category === '全部') {
+                        card.style.display = 'block';
+                    } else {
+                        const cardCategory = card.dataset.category.toLowerCase();
+                        card.style.display = cardCategory.includes(category) ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+
+        // 初始化 Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            themeVariables: {
+                primaryColor: '#6366f1',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#6366f1',
+                lineColor: '#94a3b8',
+                secondaryColor: '#8b5cf6',
+                tertiaryColor: '#1e293b'
+            }
+        });
+
+        // 代码标签切换
+        const codeTabs = document.querySelectorAll('.code-tab');
+        const panels = {
+            'mermaid-panel': document.getElementById('mermaid-panel'),
+            'ollama-panel': document.getElementById('ollama-panel')
+        };
+
+        codeTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetPanel = tab.dataset.panel;
+                if (!targetPanel) return;
+
+                // 更新所有 Tab 状态
+                codeTabs.forEach(t => {
+                    if (t.dataset.panel === targetPanel) {
+                        t.classList.add('active');
+                    } else {
+                        t.classList.remove('active');
+                    }
+                });
+
+                // 切换面板显示
+                Object.keys(panels).forEach(key => {
+                    if (panels[key]) {
+                        panels[key].style.display = key === targetPanel ? 'block' : 'none';
+                    }
+                });
+
+                // 重新渲染 Mermaid
+                if (targetPanel === 'mermaid-panel') {
+                    setTimeout(() => {
+                        mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+                    }, 10);
+                }
+            });
+        });
+
+        // 初始渲染 Mermaid
+        window.addEventListener('load', () => {
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+        });
+
+        // 卡片动画
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        repoCards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+
+        // 平滑滚动 & 导航高亮
+        const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+        const sections = document.querySelectorAll('[id]');
+
+        // 点击导航平滑滚动
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        // 移动端关闭侧边栏
+                        document.getElementById('sidebar').classList.remove('open');
+                    }
+                }
+            });
+        });
+
+        // 滚动时高亮对应导航
+        const highlightNav = () => {
+            const scrollPos = window.scrollY + 100;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const bottom = top + section.offsetHeight;
+                const id = section.getAttribute('id');
+                
+                if (scrollPos >= top && scrollPos < bottom) {
+                    sidebarLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        };
+
+        window.addEventListener('scroll', highlightNav);
+        highlightNav(); // 初始高亮
+
+        // 移动端菜单切换
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+
+        // 点击外部关闭侧边栏
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 1024 && 
+                !sidebar.contains(e.target) && 
+                !mobileMenuBtn.contains(e.target) &&
+                sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>
