@@ -4,162 +4,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Home</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 60px 50px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-
-        h1 {
-            color: #2d3748;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            color: #718096;
-            margin-bottom: 40px;
-            font-size: 1.1em;
-        }
-
-        .nav-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .nav-item {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-link {
-            display: block;
-            padding: 18px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 1;
-        }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: left 0.5s;
-            z-index: -1;
-        }
-
-        .nav-link:hover::before {
-            left: 100%;
-        }
-
-        .nav-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .nav-link:active {
-            transform: translateY(-1px);
-        }
-
-        .folder-icon {
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
-
-        .footer {
-            margin-top: 40px;
-            color: #a0aec0;
-            font-size: 0.9em;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 40px 30px;
-            }
-
-            h1 {
-                font-size: 2em;
-            }
-        }
-    </style>
+    <title>Home | chenwb47</title>
+    <link rel="stylesheet" href="./assets/theme.css">
+    <link rel="stylesheet" href="./assets/home.css">
 </head>
 
 <body>
-    <div class="container">
-        <h1>📁 项目导航</h1>
-        <p class="subtitle">快速访问项目中的各个模块</p>
+    <div class="page">
+        <div class="shell">
+            <div class="topbar">
+                <div class="title">
+                    <div class="logo">C</div>
+                    <div>
+                        <h1>个人站点导航</h1>
+                        <p class="subtitle">自适应首页（PC/手机） · 统一主题 · GitHub Pages 托管</p>
+                    </div>
+                </div>
 
-        <ul class="nav-list">
-            <li class="nav-item">
-                <a href="./primary-school-math/index.html" class="nav-link">
-                    <span class="folder-icon">📚</span>小学数学可达矩阵
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="./github-toprepo-index/open-source-wiki.html" class="nav-link">
-                    <span class="folder-icon">📚</span>开源工具精选 Wiki 页面
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="./demo/index.html" class="nav-link">
-                    <span class="folder-icon">🎨</span>演示示例 (Demo)
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="./tools/index.html" class="nav-link">
-                    <span class="folder-icon">🛠️</span>工具集 (Tools)
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="./api/index.html" class="nav-link">
-                    <span class="folder-icon">🔌</span>API 文档 (API)
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="./assets/index.html" class="nav-link">
-                    <span class="folder-icon">🖼️</span>资源文件 (Assets)
-                </a>
-            </li>
-        </ul>
+                <div class="actions">
+                    <a class="chip" href="./README.md">📄 README</a>
+                    <a class="chip" href="https://github.com/chenwb47" target="_blank" rel="noopener noreferrer">🐙 GitHub</a>
+                </div>
+            </div>
 
-        <div class="footer">
-            <p>GitHub Pages 自动部署</p>
+            <div class="grid" role="navigation" aria-label="站点入口">
+                <a class="home-card" href="./primary-school-math/index.html">
+                    <div class="card-head">
+                        <div class="icon">📚</div>
+                        <div>
+                            <div class="card-title">小学数学知识可达矩阵</div>
+                            <div class="card-desc">D3 知识图谱 + Warshall 传递闭包 + 可达性/多源分析。</div>
+                        </div>
+                    </div>
+                    <div class="card-foot">
+                        <div class="meta">`primary-school-math/`</div>
+                        <div class="cta">进入</div>
+                    </div>
+                </a>
+
+                <a class="home-card" href="./github-toprepo-index/open-source-wiki.html">
+                    <div class="card-head">
+                        <div class="icon">🧰</div>
+                        <div>
+                            <div class="card-title">开源工具精选 Wiki</div>
+                            <div class="card-desc">侧边栏 + 搜索 + 分类标签 + Mermaid 示例单页。</div>
+                        </div>
+                    </div>
+                    <div class="card-foot">
+                        <div class="meta">`github-toprepo-index/`</div>
+                        <div class="cta">进入</div>
+                    </div>
+                </a>
+
+                <a class="home-card" href="./shortcut/index.html">
+                    <div class="card-head">
+                        <div class="icon">🔗</div>
+                        <div>
+                            <div class="card-title">Awesome Links</div>
+                            <div class="card-desc">个人常用链接导航（可继续精简无效占位按钮）。</div>
+                        </div>
+                    </div>
+                    <div class="card-foot">
+                        <div class="meta">`shortcut/`</div>
+                        <div class="cta">进入</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="footer">© chenwb47 · GitHub Pages</div>
         </div>
     </div>
 </body>
