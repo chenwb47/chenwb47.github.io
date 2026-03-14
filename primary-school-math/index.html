@@ -272,16 +272,24 @@
         </div>
 
         <!-- 右侧可达矩阵 -->
-        <div id="panel-matrix" class="mobile-tab-panel hidden md:flex w-full md:w-[400px] lg:w-[500px] bg-slate-900/50 border-l border-slate-800 flex-col glass-panel z-30">
+        <div id="panel-matrix" class="mobile-tab-panel hidden md:flex w-full md:w-[400px] lg:w-[500px] bg-slate-900/50 border-l border-slate-800 flex-col glass-panel z-30 transition-all duration-300">
             <div class="p-3 md:p-4 border-b border-slate-800 flex justify-between items-center">
                 <h2 class="text-base md:text-lg font-semibold text-slate-200">可达矩阵 R</h2>
-                <div class="flex gap-2">
+                <div class="flex gap-2 items-center">
+                    <button onclick="toggleMatrixPanel()" id="matrixToggleBtn"
+                        class="px-2 py-1 md:px-3 md:py-1.5 bg-slate-800 hover:bg-slate-700 rounded text-xs transition-colors border border-slate-700 flex items-center gap-1">
+                        <svg id="matrixToggleIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                        <span id="matrixToggleText">收起</span>
+                    </button>
                     <button onclick="exportMatrix()"
                         class="px-2 py-1 md:px-3 md:py-1.5 bg-slate-800 hover:bg-slate-700 rounded text-xs transition-colors border border-slate-700">
                         导出CSV
                     </button>
                 </div>
             </div>
+            <div id="matrixContent" class="flex flex-col flex-1 overflow-hidden">
 
             <div class="flex-1 overflow-auto p-3 md:p-4" id="matrixContainer">
                 <div class="text-center text-slate-500 py-12">
@@ -308,6 +316,7 @@
                 <div class="text-slate-500 italic mt-2">
                     使用Warshall算法计算传递闭包
                 </div>
+            </div>
             </div>
         </div>
     </div>

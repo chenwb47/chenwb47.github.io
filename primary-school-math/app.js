@@ -933,3 +933,30 @@ function dragended(event, d) {
     d.fx = null;
     d.fy = null;
 }
+
+// 矩阵面板折叠/展开功能
+let isMatrixCollapsed = false;
+function toggleMatrixPanel() {
+    const panel = document.getElementById('panel-matrix');
+    const content = document.getElementById('matrixContent');
+    const icon = document.getElementById('matrixToggleIcon');
+    const text = document.getElementById('matrixToggleText');
+    
+    isMatrixCollapsed = !isMatrixCollapsed;
+    
+    if (isMatrixCollapsed) {
+        // 折叠状态
+        content.style.display = 'none';
+        text.textContent = '展开';
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />';
+        panel.classList.remove('w-full', 'md:w-[400px]', 'lg:w-[500px]');
+        panel.classList.add('w-auto');
+    } else {
+        // 展开状态
+        content.style.display = 'flex';
+        text.textContent = '收起';
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />';
+        panel.classList.remove('w-auto');
+        panel.classList.add('w-full', 'md:w-[400px]', 'lg:w-[500px]');
+    }
+}
