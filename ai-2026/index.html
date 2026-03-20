@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 AI 进展与对比看板</title>
+    <link rel="stylesheet" href="../assets/theme.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        .page-wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 16px 60px;
+        }
+        .hero {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: rgba(17, 28, 51, 0.72);
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+        h1 {
+            margin: 0 0 8px;
+            font-size: clamp(22px, 4vw, 34px);
+        }
+        .muted {
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+        .tip {
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .section {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: rgba(17, 28, 51, 0.55);
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+        h2 {
+            margin: 0 0 10px;
+            font-size: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: rgba(99, 102, 241, 0.2);
+        }
+        .chip {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid transparent;
+        }
+        .open { background: rgba(16,185,129,.18); border-color: rgba(16,185,129,.45); }
+        .closed { background: rgba(239,68,68,.16); border-color: rgba(239,68,68,.45); }
+        .mixed { background: rgba(245,158,11,.16); border-color: rgba(245,158,11,.45); }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .diagram-card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: rgba(11, 20, 41, 0.75);
+            padding: 12px;
+        }
+        .diagram-title {
+            margin: 0 0 8px;
+            font-size: 15px;
+            color: var(--muted);
+        }
+        .footer {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        a { color: #93c5fd; }
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
+            table { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrap">
+        <section class="hero">
+            <h1>2026 年 AI 进展与工具对比</h1>
+            <p class="muted">聚焦模型能力、是否开源、上下文长度、以及 AI Code 工具的协作能力与适用场景。</p>
+            <p class="tip">说明：该页为静态对比看板，适合持续手动更新；时间范围按 2025Q4-2026Q1 组织。</p>
+        </section>
+
+        <section class="section">
+            <h2>一、主流模型对比（2026 视角）</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>模型</th>
+                        <th>定位</th>
+                        <th>是否开源</th>
+                        <th>上下文</th>
+                        <th>优势</th>
+                        <th>注意点</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>GPT-4.x / o 系列</td>
+                        <td>通用 + 推理 + 编码</td>
+                        <td><span class="chip closed">闭源</span></td>
+                        <td>长上下文（产品版本差异）</td>
+                        <td>综合能力稳定，工具调用生态成熟</td>
+                        <td>成本与配额需精细控制</td>
+                    </tr>
+                    <tr>
+                        <td>Claude 系列</td>
+                        <td>长文档、代码、代理协作</td>
+                        <td><span class="chip closed">闭源</span></td>
+                        <td>超长上下文（版本相关）</td>
+                        <td>代码审阅和文档理解体验强</td>
+                        <td>区域与平台策略需关注</td>
+                    </tr>
+                    <tr>
+                        <td>Gemini 系列</td>
+                        <td>多模态 + Google 生态</td>
+                        <td><span class="chip closed">闭源</span></td>
+                        <td>长上下文（版本相关）</td>
+                        <td>多模态推理和生态整合能力好</td>
+                        <td>能力随产品线变化较快</td>
+                    </tr>
+                    <tr>
+                        <td>DeepSeek-V3 / R 系列</td>
+                        <td>高性价比推理与编码</td>
+                        <td><span class="chip open">开源</span></td>
+                        <td>较长（部署方案相关）</td>
+                        <td>开源可自托管，成本友好</td>
+                        <td>企业落地需补治理和观测</td>
+                    </tr>
+                    <tr>
+                        <td>Llama 系列（Meta）</td>
+                        <td>私有化部署基础模型</td>
+                        <td><span class="chip mixed">许可开放</span></td>
+                        <td>依实现而定</td>
+                        <td>生态广，适合自定义微调</td>
+                        <td>推理效率与质量需按场景选型</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>二、AI Code 工具对比</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>工具</th>
+                        <th>交互方式</th>
+                        <th>强项</th>
+                        <th>适合场景</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cursor</td>
+                        <td>IDE 内 Agent + 上下文编辑</td>
+                        <td>文件级改动、仓库上下文、快速迭代</td>
+                        <td>日常研发、重构、前后端联调</td>
+                    </tr>
+                    <tr>
+                        <td>Claude Code</td>
+                        <td>终端 Agent</td>
+                        <td>Repo 理解、命令链、代码审阅</td>
+                        <td>命令行驱动开发、自动化改造</td>
+                    </tr>
+                    <tr>
+                        <td>OpenCode</td>
+                        <td>开源终端 Agent</td>
+                        <td>可定制、可自托管、可替换模型</td>
+                        <td>对成本和私有化有要求的团队</td>
+                    </tr>
+                    <tr>
+                        <td>GitHub Copilot</td>
+                        <td>IDE 补全 + Chat</td>
+                        <td>补全稳定、上手门槛低</td>
+                        <td>中小改动、模板代码生成</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>三、Mermaid 图示</h2>
+            <div class="grid">
+                <div class="diagram-card">
+                    <p class="diagram-title">1) 2026 AI 进展时间线</p>
+                    <pre class="mermaid">
+timeline
+    title 2025Q4 - 2026Q1 AI 进展
+    2025 Q4 : 多模型 Agent 工作流普及
+            : 开源推理模型加速迭代
+    2026 Q1 : 编码 Agent 深入 IDE/Terminal
+            : 私有化部署 + 成本优化成为主线
+            : 多模态能力成为默认配置
+                    </pre>
+                </div>
+
+                <div class="diagram-card">
+                    <p class="diagram-title">2) 模型生态关系（开源/闭源）</p>
+                    <pre class="mermaid">
+flowchart LR
+    A[闭源商业模型] --> A1[GPT / Claude / Gemini]
+    B[开源或开放许可模型] --> B1[DeepSeek / Llama]
+    A1 --> C[云端 API 调用]
+    B1 --> D[自托管部署]
+    C --> E[企业应用]
+    D --> E[企业应用]
+    E --> F[AI Coding / RAG / Agent]
+                    </pre>
+                </div>
+
+                <div class="diagram-card" style="grid-column: 1 / -1;">
+                    <p class="diagram-title">3) AI Code 工具工作流对比</p>
+                    <pre class="mermaid">
+flowchart TD
+    Dev[开发者需求] --> Plan[拆分任务]
+    Plan --> ToolA[IDE Agent<br/>Cursor]
+    Plan --> ToolB[Terminal Agent<br/>Claude Code / OpenCode]
+    ToolA --> Edit[代码修改]
+    ToolB --> Edit[代码修改]
+    Edit --> Test[本地测试]
+    Test --> Review[代码审阅]
+    Review --> PR[提交 PR / 发布]
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <p class="footer">返回首页：<a href="../index.html">/index.html</a></p>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: "dark",
+            securityLevel: "loose"
+        });
+    </script>
+</body>
+</html>
